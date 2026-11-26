@@ -159,7 +159,7 @@ Supply-Chain-and-Inventory-Analytics/
 │   └── Dataset_Source.txt
 │
 ├── Documentation/
-│   ├── Data_Dictionary.pdf
+│   ├── Data_Dictionary.md
 │   └──DAX_Measures.txt
 │
 ├── Screenshots/
