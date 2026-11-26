@@ -150,7 +150,7 @@ The Power BI report contains six pages:
 Once these screenshots are added to the repository, they can be displayed here. Example:
 
 ```markdown
-![Executive Overview](Screenshots/Executive_Overview.png)
+![Executive Overview](Screenshots/1_Executive_Overview.png)
 ```
 
 ## Repository Structure
@@ -163,23 +163,19 @@ Supply-Chain-and-Inventory-Analytics/
 │   └── Dashboard_PDF.pdf
 │
 ├── Dataset/
-│   ├── DataCo_Cleaned.csv
 │   └── Dataset_Source.txt
 │
 ├── Documentation/
-│   ├── Project_Report.pdf
 │   ├── Data_Dictionary.pdf
-│   ├── DAX_Measures.txt
-│   └── Key_Findings_and_Recommendations.pdf
+│   └──DAX_Measures.txt
 │
 ├── Screenshots/
-│   ├── Home_Page.png
-│   ├── Executive_Overview.png
-│   ├── Sales_and_Profit.png
-│   ├── Product_Performance.png
-│   ├── Customer_Insights.png
-│   ├── Delivery_and_Logistics.png
-│   └── Regional_Analysis.png
+│   ├── 1_Executive_Overview.png
+│   ├── 2_Sales_and_Profit.png
+│   ├── 3_Product_Performance.png
+│   ├── 4_Customer_Insights.png
+│   ├── 5_elivery_and_Logistics.png
+│   └── 6_Regional_Analysis.png
 │
 ├── Business_Problems/
 │   └── Business_Problems.pdf
@@ -193,8 +189,6 @@ Supply-Chain-and-Inventory-Analytics/
 └── .gitignore
 ```
 
-The structure above is the intended repository layout. Include only files that you have actually created and are ready to publish.
-
 ## How to Use
 
 1. Clone or download this repository.
@@ -203,8 +197,6 @@ The structure above is the intended repository layout. Include only files that y
 4. Ensure the required dataset and database table are available.
 5. Refresh the report to load the data.
 6. Use the report filters for Month-Year, Region, Category and Customer Segment to explore the analysis.
-
-Connection credentials are not included in this repository. Do not commit passwords, private connection details or other secrets.
 
 ## Limitations & Interpretation Notes
 
@@ -220,8 +212,7 @@ Connection credentials are not included in this repository. Do not commit passwo
 
 - **Project:** Supply Chain & Inventory Analytics
 - **Year:** 2026
-- **Status:** Power BI dashboard and supporting analysis prepared
-- **GitHub / Live Link:** Add the repository URL after publishing
+- **Status:** Power BI dashboard and supporting analysis prepared 
 
 ## Dataset Citation
 
