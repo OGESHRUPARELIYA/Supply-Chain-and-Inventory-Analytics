@@ -1,0 +1,266 @@
+SUPPLY CHAIN & INVENTORY ANALYTICS
+DAX MEASURES & CALCULATED COLUMNS
+=================================
+
+Project: Supply Chain & Inventory Analytics
+Power BI table: 'supply_chain_ops dataco_cleaned'
+
+IMPORTANT
+---------
+The formulas below use the table name found in the uploaded Power BI report definition:
+'supply_chain_ops dataco_cleaned'
+
+Create measures using Modeling > New measure.
+Create calculated columns using Modeling > New column.
+Do not create measures as calculated columns or vice versa.
+
+Some visuals use implicit aggregations (such as average shipping days) rather than
+explicit DAX measures. Those are documented in the relevant section below.
+
+------------------------------------------------------------
+1. EXECUTIVE OVERVIEW
+------------------------------------------------------------
+
+Total Sales =
+SUM('supply_chain_ops dataco_cleaned'[Sales])
+
+Total Profit =
+SUM('supply_chain_ops dataco_cleaned'[Order Profit Per Order])
+
+Total Orders =
+DISTINCTCOUNT('supply_chain_ops dataco_cleaned'[Order Id])
+
+Total Customers =
+DISTINCTCOUNT('supply_chain_ops dataco_cleaned'[Customer Id])
+
+Profit Margin =
+DIVIDE([Total Profit], [Total Sales], 0)
+
+
+------------------------------------------------------------
+2. SALES & PROFIT
+------------------------------------------------------------
+
+Average Order Value =
+DIVIDE([Total Sales], [Total Orders], 0)
+
+Profit per Order =
+DIVIDE([Total Profit], [Total Orders], 0)
+
+
+------------------------------------------------------------
+3. PRODUCT PERFORMANCE
+------------------------------------------------------------
+
+Total Products =
+DISTINCTCOUNT('supply_chain_ops dataco_cleaned'[Product Id])
+
+Units Sold =
+SUM('supply_chain_ops dataco_cleaned'[Order Item Quantity])
+
+Average Product Price =
+DIVIDE([Total Sales], [Units Sold], 0)
+
+NOTE:
+Average Product Price is calculated as Sales divided by Units Sold.
+It represents average sales value per unit in the current filter context,
+not necessarily the product's listed/catalogue price.
+
+
+------------------------------------------------------------
+4. CUSTOMER INSIGHTS
+------------------------------------------------------------
+
+Sales per Customer =
+DIVIDE([Total Sales], [Total Customers], 0)
+
+Average Orders per Customer =
+DIVIDE([Total Orders], [Total Customers], 0)
+
+NOTE:
+The dashboard label "Customer Value" refers to Sales per Customer.
+It is not Customer Lifetime Value (CLV).
+
+
+------------------------------------------------------------
+5. DELIVERY & LOGISTICS
+------------------------------------------------------------
+
+Total Shipments =
+COUNTROWS('supply_chain_ops dataco_cleaned')
+
+Late Deliveries =
+CALCULATE(
+    COUNTROWS('supply_chain_ops dataco_cleaned'),
+    'supply_chain_ops dataco_cleaned'[Delivery Status] = "Late delivery"
+)
+
+Late Delivery Rate =
+DIVIDE([Late Deliveries], [Total Shipments], 0)
+
+On-Time Deliveries =
+CALCULATE(
+    COUNTROWS('supply_chain_ops dataco_cleaned'),
+    'supply_chain_ops dataco_cleaned'[Delivery Status] = "Shipping on time"
+)
+
+Cancelled Shipments =
+CALCULATE(
+    COUNTROWS('supply_chain_ops dataco_cleaned'),
+    'supply_chain_ops dataco_cleaned'[Delivery Status] = "Shipping canceled"
+)
+
+IMPORTANT DELIVERY GRAIN:
+These delivery measures count order-item rows, not distinct physical shipments.
+The dashboard's "Total Shipments", "Late Deliveries", "On-Time" and
+"Cancelled Orders" labels therefore represent order-item record counts.
+Use this limitation when interpreting operational performance.
+
+
+------------------------------------------------------------
+6. REGIONAL ANALYSIS
+------------------------------------------------------------
+
+Best Profit Margin =
+MAXX(
+    VALUES('supply_chain_ops dataco_cleaned'[Order Region]),
+    [Profit Margin]
+)
+
+Lowest Delay Rate =
+MINX(
+    VALUES('supply_chain_ops dataco_cleaned'[Order Region]),
+    [Late Delivery Rate]
+)
+
+At-Risk Regions =
+COUNTROWS(
+    FILTER(
+        VALUES('supply_chain_ops dataco_cleaned'[Order Region]),
+        [Late Delivery Rate] > 0.55
+    )
+)
+
+Best Region =
+VAR RegionTable =
+    ADDCOLUMNS(
+        VALUES('supply_chain_ops dataco_cleaned'[Order Region]),
+        "RegionMargin", [Profit Margin]
+    )
+VAR TopRegion =
+    TOPN(
+        1,
+        RegionTable,
+        [RegionMargin], DESC,
+        'supply_chain_ops dataco_cleaned'[Order Region], ASC
+    )
+RETURN
+    CONCATENATEX(
+        TopRegion,
+        'supply_chain_ops dataco_cleaned'[Order Region],
+        ", "
+    )
+
+NOTE:
+At-Risk Regions uses a late-delivery rate greater than 55%.
+This is an analyst-defined threshold, not an externally specified SLA.
+
+
+------------------------------------------------------------
+7. CALCULATED COLUMNS
+------------------------------------------------------------
+
+7.1 Month-Year
+Create as a calculated column:
+
+Month-Year =
+FORMAT(
+    'supply_chain_ops dataco_cleaned'[order date (DateOrders)],
+    "MMM yyyy"
+)
+
+7.2 Month-Year Sort
+Create as a calculated column:
+
+Month-Year Sort =
+YEAR('supply_chain_ops dataco_cleaned'[order date (DateOrders)]) * 100
+    + MONTH('supply_chain_ops dataco_cleaned'[order date (DateOrders)])
+
+SORTING INSTRUCTION:
+In Data view, select the Month-Year column, then Column tools >
+Sort by column > Month-Year Sort.
+
+7.3 Customer ID Label
+Create as a calculated column if Customer Id is being treated as a continuous
+numeric axis in the Top 10 Customers visual:
+
+Customer ID Label =
+FORMAT('supply_chain_ops dataco_cleaned'[Customer Id], "0")
+
+Use Customer ID Label as the categorical axis field. Do not sum Customer Id.
+
+7.4 Delivery Status Sort
+Create as a calculated column:
+
+Delivery Status Sort =
+SWITCH(
+    'supply_chain_ops dataco_cleaned'[Delivery Status],
+    "Late delivery", 1,
+    "Advance shipping", 2,
+    "Shipping on time", 3,
+    "Shipping canceled", 4,
+    5
+)
+
+SORTING INSTRUCTION:
+Select Delivery Status, then Column tools > Sort by column >
+Delivery Status Sort.
+
+
+------------------------------------------------------------
+8. VISUAL AGGREGATIONS (NO SEPARATE MEASURE REQUIRED)
+------------------------------------------------------------
+
+The following visuals can use the listed fields with the indicated aggregation:
+
+• Actual vs Scheduled Shipping Days
+  - Average of Days for shipping (real)
+  - Average of Days for shipment (scheduled)
+  - Do not use Sum for these duration fields.
+
+• Delivery Status Distribution
+  - Count of rows / count of Delivery Status by Delivery Status.
+
+• Regional Delivery Status Breakdown
+  - Count of order-item rows by Order Region and Delivery Status.
+  - For a 100% stacked bar, the visual calculates each status share within region.
+
+• Profit Margin by Category / Region
+  - Use the [Profit Margin] measure.
+
+• Monthly Sales Trend / Monthly Sales vs Profit
+  - Use [Total Sales] and [Total Profit] by Month-Year.
+
+• Monthly Customer Orders Trend
+  - Use [Total Orders] by Month-Year.
+
+• Late Delivery Rate by Shipping Mode / Region
+  - Use [Late Delivery Rate] by Shipping Mode or Order Region.
+
+
+------------------------------------------------------------
+9. DATA & INTERPRETATION NOTES
+------------------------------------------------------------
+
+• Original dataset: 180,519 rows and 53 columns.
+• Cleaned project dataset: 180,519 rows and 45 columns.
+• Three missing Customer Zipcode values were retained as null.
+• No duplicate rows were found in the cleaned dataset.
+• Delivery measures are calculated at order-item row level, not unique shipment level.
+• The dataset currency code has not been verified; do not label monetary values as USD.
+• 2018 contains only 2,123 rows, materially fewer than 2015–2017.
+  Treat 2018 as limited data coverage.
+• Relationships between discount level and profit margin, or shipping mode and
+  late delivery, are descriptive associations and do not prove causation.
+
+END OF FILE

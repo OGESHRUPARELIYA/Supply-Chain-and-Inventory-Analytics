@@ -1,0 +1,24 @@
+DATASET SOURCE
+==============
+
+Purpose: Primary source for the DataCo SMART SUPPLY CHAIN FOR BIG DATA ANALYSIS dataset.
+
+Dataset: DataCo SMART SUPPLY CHAIN FOR BIG DATA ANALYSIS
+Authors: Constante, Fabian; Silva, Fernando; Pereira, António
+Year: 2019
+Repository: Mendeley Data
+Version: 5
+DOI: 10.17632/8gx2fvg2k6.5
+Dataset URL: https://data.mendeley.com/datasets/8gx2fvg2k6/5
+Alternate Dataset URL: https://www.kaggle.com/datasets/shashwatwork/dataco-smart-supply-chain-for-big-data-analysis
+License: CC BY 4.0
+
+Citation:
+Constante, F., Silva, F., & Pereira, A. (2019). DataCo SMART SUPPLY CHAIN
+FOR BIG DATA ANALYSIS (Version 5). Mendeley Data.
+https://doi.org/10.17632/8gx2fvg2k6.5
+
+Project Dataset:
+The cleaned project dataset is DataCo_Cleaned.csv, containing 180,519 rows
+and 45 columns. It was prepared from the original DataCo dataset for use
+in this Supply Chain and Inventory Analytics project.
