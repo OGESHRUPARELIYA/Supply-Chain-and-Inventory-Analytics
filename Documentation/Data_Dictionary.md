@@ -88,9 +88,3 @@ The following eight fields were excluded from the cleaned project dataset:
 - The project cleaning notes report three missing `Customer Zipcode` values retained as null.
 - The project cleaning notes report no duplicate rows in the cleaned dataset.
 - The cleaned dataset retains 45 columns after removing eight fields from the 53-column source.
-
-## Source
-
-Constante, Fabian; Silva, Fernando; Pereira, António (2019). *DataCo SMART SUPPLY CHAIN FOR BIG DATA ANALYSIS*, Version 5. Mendeley Data. DOI: `10.17632/8gx2fvg2k6.5`. Licensed under CC BY 4.0.
-
-The field descriptions were taken from the accompanying `Description.csv` supplied with the dataset.
