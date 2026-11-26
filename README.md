@@ -139,19 +139,12 @@ These are investigation priorities based on observed patterns; they are not conf
 
 The Power BI report contains six pages:
 
-- `Screenshots/Home_Page.png`
-- `Screenshots/Executive_Overview.png`
-- `Screenshots/Sales_and_Profit.png`
-- `Screenshots/Product_Performance.png`
-- `Screenshots/Customer_Insights.png`
-- `Screenshots/Delivery_and_Logistics.png`
-- `Screenshots/Regional_Analysis.png`
-
-Once these screenshots are added to the repository, they can be displayed here. Example:
-
-```markdown
-![Executive Overview](Screenshots/1_Executive_Overview.png)
-```
+- `Screenshots/1_Executive_Overview.png`
+- `Screenshots/2_Sales_and_Profit.png`
+- `Screenshots/3_Product_Performance.png`
+- `Screenshots/4_Customer_Insights.png`
+- `Screenshots/5_Delivery_and_Logistics.png`
+- `Screenshots/6_Regional_Analysis.png`
 
 ## Repository Structure
 
